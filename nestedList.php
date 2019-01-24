@@ -133,25 +133,145 @@
                     </li>
                 </ul>
             </div>
-            <div class="filterContent">
-            <div class="sliderContainer">
-                <span class="age-slider">Age:</span>
-                <div id="ageOutput"></div>
-                <input type="range" min="1" max="100" value="1" class="slider" id="ageRange">
-                <script src="slider.js"></script>
-            </div>
-            <div class="sliderContainer">
-                <span class="age-slider">Price:</span>
-                <div id="priceOutput"></div>
-                <input type="range" min="1" max="5000" value="1000" class="slider" id="priceRange">
-                <script src="slider.js"></script>
-            </div>
-            <input type="button" class="filterButton" value="Filter">
-            </div>
+            <?php
+            $type = (int)$_GET["type"];
+            $breed = (int)$_GET["breed"];
+            if (!is_nan($type) && !is_nan($breed)) {
+                if ($breed == null) {
+                    $servername = "localhost";
+                    $username = "root";
+                    $password = "admin";
+                    $dbname = "mydb";
+                    // Create connection
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    mysqli_set_charset($conn, 'utf-8');
+                    // Check connection
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+                    $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
+                            FROM pet AS p 
+                            INNER JOIN breed AS b 
+                            ON p.breed_id = b.breed_id 
+                            INNER JOIN pet_type AS t
+                            ON b.type_id = t.type_id AND b.type_id = \"$type\"";
+                    $result = $conn->query($sql);
+                    $result2 = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        $pet_type = array_slice($result2->fetch_assoc(), 0, 11);
+                        echo "
+            <div class=\"path\">
+            <div class=\"type\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">" , $pet_type["type"], "</a></div></div>";
+                        echo "
+        <div class=\"sliderContainer\">
+            <input type=\"range\" min=\"1\" max=\"100\" value=\"50\" class=\"slider\" id=\"myRange\">
         </div>
-        <div class="separator"></div>
-        <div class="goods">
-            <?php require("loadGoods.php") ?>
+        </div>
+        <div class=\"separator\"></div>
+        <div class=\"goods\">";
+                        // output data
+                        while ($row = $result->fetch_assoc()) {
+                            $today = new DateTime();
+                            $date = new DateTime($row["date"]);
+                            $diff = $date->diff($today);
+                            echo "<div class=\"good\">";
+                            echo "<img class=\"photo\" src=\"", $row["image_path"], "\">";
+                            echo "<div class=\"clear\"></div>";
+                            echo "<div class=\"firstLine\">";
+                            //        $tmp = utf8_encode($row["name"]);
+                            //        echo mb_detect_encoding($row["name"]);
+                            echo "<div class=\"name\">", $row["name"], "</div>";
+
+                            if ($diff->format("%y") == 0) {
+                                echo "<div class=\"age\">", $diff->format("%m"), " m.</div>";
+                            } else {
+                                echo "<div class=\"age\">", $diff->format("%y"), " yr.</div>";
+                            }
+                            echo "</div>";
+                            echo "<div class=\"price\">", $row["price"], " €</div>";
+                            echo "<div class=\"show-more\">";
+                            echo "<a href=\"pet.php?pet=" , $row["pet_id"] , "\">Show More</a>";
+//                            echo "<div></div>";
+                            echo "</div>";
+                            echo "</div>";
+                        }
+                    } else {
+                        echo "0 results";
+                    }
+                    $conn->close();
+                } else {
+                    $servername = "localhost";
+                    $username = "root";
+                    $password = "admin";
+                    $dbname = "mydb";
+                    // Create connection
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    mysqli_set_charset($conn, 'utf-8');
+                    // Check connection
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
+                            FROM pet AS p 
+                            INNER JOIN breed AS b 
+                            ON p.breed_id = b.breed_id 
+                            INNER JOIN pet_type AS t
+                            ON b.type_id = t.type_id AND b.type_id = \"$type\" AND p.breed_id=\"$breed\"";
+                    $result = $conn->query($sql);
+                    $result2 = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        $pet_type = array_slice($result2->fetch_assoc(), 0, 11);
+                        echo "
+            <div class=\"path\">
+            <div class=\"type\"> / ", "<a href=\"nestedList.php?type=$type&breed=null\">" , $pet_type["type"], "</div>";
+                        echo "
+            <div class=\"path-breed\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">" , $pet_type["breed"], "</a></div></div>
+        <div class=\"sliderContainer\">
+            <input type=\"range\" min=\"1\" max=\"100\" value=\"50\" class=\"slider\" id=\"myRange\">
+        </div>
+        </div>
+        <div class=\"separator\"></div>
+        <div class=\"goods\">";
+
+
+                        // output data
+                        while ($row = $result->fetch_assoc()) {
+                            $today = new DateTime();
+                            $date = new DateTime($row["date"]);
+                            $diff = $date->diff($today);
+                            echo "<div class=\"good\">";
+                            echo "<img class=\"photo\" src=\"", $row["image_path"], "\">";
+                            echo "<div class=\"clear\"></div>";
+                            echo "<div class=\"firstLine\">";
+                            //        $tmp = utf8_encode($row["name"]);
+                            //        echo mb_detect_encoding($row["name"]);
+                            echo "<div class=\"name\">", $row["name"], "</div>";
+
+                            if ($diff->format("%y") == 0) {
+                                echo "<div class=\"age\">", $diff->format("%m"), " m.</div>";
+                            } else {
+                                echo "<div class=\"age\">", $diff->format("%y"), " yr.</div>";
+                            }
+                            echo "</div>";
+                            echo "<div class=\"price\">", $row["price"], " €</div>";
+                            echo "<div class=\"show-more\">";
+                            echo "<a href=\"pet.php?pet=" , $row["pet_id"] , "\">Show More</a>";
+//                            echo "<div></div>";
+                            echo "</div>";
+                            echo "</div>";
+                        }
+                    } else {
+                        echo "0 results";
+                    }
+                    $conn->close();
+                }
+            } else {
+                echo "<script language='text/javascript'>function alert() { alert('Unable to continue. Sorry for inconvenience.'); }</script>";
+            }
+            ?>
         </div>
     </div>
 </div>

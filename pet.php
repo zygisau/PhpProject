@@ -133,25 +133,78 @@
                     </li>
                 </ul>
             </div>
-            <div class="filterContent">
-            <div class="sliderContainer">
-                <span class="age-slider">Age:</span>
-                <div id="ageOutput"></div>
-                <input type="range" min="1" max="100" value="1" class="slider" id="ageRange">
-                <script src="slider.js"></script>
-            </div>
-            <div class="sliderContainer">
-                <span class="age-slider">Price:</span>
-                <div id="priceOutput"></div>
-                <input type="range" min="1" max="5000" value="1000" class="slider" id="priceRange">
-                <script src="slider.js"></script>
-            </div>
-            <input type="button" class="filterButton" value="Filter">
-            </div>
-        </div>
-        <div class="separator"></div>
-        <div class="goods">
-            <?php require("loadGoods.php") ?>
+            <?php
+            $pet = (int)$_GET["pet"];
+            if (!is_nan($pet)) {
+                    $servername = "localhost";
+                    $username = "root";
+                    $password = "admin";
+                    $dbname = "mydb";
+                    // Create connection
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    mysqli_set_charset($conn, 'utf-8');
+                    // Check connection
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
+                            FROM pet AS p 
+                            INNER JOIN breed AS b 
+                            ON p.breed_id = b.breed_id 
+                            INNER JOIN pet_type AS t
+                            ON b.type_id = t.type_id AND p.pet_id=\"$pet\"";
+                    $result = $conn->query($sql);
+                    $result2 = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        $pet_type = $result2->fetch_assoc();
+                        echo "
+            <div class=\"path\">
+            <div class=\"type\"> / ", "<a href=\"nestedList.php?type=" , $pet_type["type_id"] , "&breed=null\">", $pet_type["type"], "</a></div>";
+                        echo "
+            <div class=\"path-breed\"> / ", "<a href=\"nestedList.php?type=" , $pet_type["type_id"] , "&breed=", $pet_type["breed_id"] , "\">", $pet_type["breed"], "</a></div>";
+                        echo "
+            <div class=\"path-pet\"> / " , "<a href=\"pet.php?pet=$pet\">" , $pet_type["name"] , "</a></div>";
+                        echo "
+        </div></div>
+        <div class=\"separator\"></div>
+        <div class=\"goods\">";
+
+
+                        // output data
+                        while ($row = $result->fetch_assoc()) {
+                            $today = new DateTime();
+                            $date = new DateTime($row["date"]);
+                            $diff = $date->diff($today);
+                            echo "<div class=\"petContainer\">";
+                                echo "<div class=\"img-and-price\">";
+                                    echo "<img class=\"pet-photo\" src=\"", $row["image_path"], "\">";
+                                    echo "<div class=\"info\">";
+                                        echo "<h1>" , $row["name"] , "</h1>";
+                                        echo "<h2>" , $row["price"] , " €</h2>";
+                                        echo "<div class=\"separator-info\"></div>";
+                                        echo "<h3>Description</h3>";
+                                        if ($diff->format("%y") == 0) {
+                                            echo "<div class=\"info-age\">Age: ", $diff->format("%m"), " m.</div>";
+                                        } else {
+                                            echo "<div class=\"info-age\">Age: ", $diff->format("%y"), " yr.</div>";
+                                        }
+                                        echo "<div class=\"info-story\">Story: " , $row["story"] , "</div>";
+                                    echo "<div class=\"separator-info\"></div>";
+                                    echo "<input type='button' class='info-buy' value='Add to cart'>";
+                                    echo "</div>";
+                                echo "</div>";
+                            echo "</div>";
+                        }
+                    } else {
+                        echo "0 results";
+                    }
+                    $conn->close();
+            } else {
+                echo "<script language='text/javascript'>function alert() { alert('Unable to continue. Sorry for inconvenience.'); }</script>";
+            }
+            ?>
         </div>
     </div>
 </div>

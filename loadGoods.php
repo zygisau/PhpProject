@@ -37,8 +37,8 @@ if ($result->num_rows > 0) {
         echo "</div>";
         echo "<div class=\"price\">", $row["price"] , " €</div>";
         echo "<div class=\"show-more\">";
-        echo "<a href=\"#\">Show More</a>";
-        echo "<div></div>";
+        echo "<a href=\"pet.php?pet=" , $row["pet_id"] , "\">Show More</a>";
+//        echo "<div></div>";
         echo "</div>";
         echo "</div>";
     }
