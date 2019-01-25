@@ -20,8 +20,9 @@
         </div>
     </div>
     <div id="main">
-        <div class="filter">
-            <div class="nav">
+        <div class="filter" id="filter">
+            <div class="left-element">
+                <div class="nav">
                 <ul id="navmenu">
                     <li><a href="index.php" class="animals">Animals</a>
                         <ul class="sub1">
@@ -133,21 +134,21 @@
                     </li>
                 </ul>
             </div>
-            <div class="filterContent">
-            <div class="sliderContainer">
-                <span class="age-slider">Age:</span>
-                <div id="ageOutput"></div>
-                <input type="range" min="1" max="100" value="1" class="slider" id="ageRange">
-                <script src="slider.js"></script>
             </div>
-            <div class="sliderContainer">
-                <span class="age-slider">Price:</span>
-                <div id="priceOutput"></div>
-                <input type="range" min="1" max="5000" value="1000" class="slider" id="priceRange">
-                <script src="slider.js"></script>
-            </div>
-            <input type="button" class="filterButton" value="Filter">
-            </div>
+            <form class="filterContent" action="filtered.php?type=null&breed=null&" method="get">
+                <div class="sliderContainer">
+                    <label class="age-slider">Age:</label>
+
+                    <input type="number" min="1" max="100" value="1" class="slider" id="ageRange">
+                    <script src="filterSubmit.js"></script>
+                </div>
+                <div class="sliderContainer">
+                    <label class="age-slider">Price:</label>
+                    <input type="number" step="10" min="10" max="5000" value="1000" class="slider" id="priceRange">
+<!--                    <script src="filterSubmit.js"></script>-->
+                </div>
+                <input type="submit" class="filterButton" id="filter-submit" value="Filter">
+            </form>
         </div>
         <div class="separator"></div>
         <div class="goods">
