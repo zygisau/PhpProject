@@ -135,18 +135,21 @@
                 </ul>
             </div>
             </div>
-            <form class="filterContent" action="filtered.php?type=null&breed=null&" method="get">
+            <form class="filterContent" action="filtered.php?" method="get">
                 <div class="sliderContainer">
                     <label class="age-slider">Age:</label>
-
-                    <input type="number" min="1" max="100" value="1" class="slider" id="ageRange">
-                    <script src="filterSubmit.js"></script>
+                    <input type="number" name="age-from" min="1" max="100" value="1" class="slider">
+                    <label class="age-slider">to</label>
+                    <input type="number" name="age-to" min="1" max="100" value="10" class="slider">
                 </div>
                 <div class="sliderContainer">
                     <label class="age-slider">Price:</label>
-                    <input type="number" step="10" min="10" max="5000" value="1000" class="slider" id="priceRange">
-<!--                    <script src="filterSubmit.js"></script>-->
+                    <input type="number" name="price-from" step="10" min="10" max="5000" value="1" class="slider">
+                    <label class="age-slider">to</label>
+                    <input type="number" name="price-to" step="10" min="10" max="5000" value="1000" class="slider">
                 </div>
+                <input type="hidden" name="type" value="null">
+                <input type="hidden" name="breed" value="null">
                 <input type="submit" class="filterButton" id="filter-submit" value="Filter">
             </form>
         </div>

@@ -132,7 +132,6 @@
                         </li>
                     </ul>
                 </div>
-<!--            </div>-->
                 <?php
                 $type = (int)$_GET["type"];
                 $breed = (int)$_GET["breed"];
@@ -161,11 +160,28 @@
                         if ($result->num_rows > 0) {
                             $pet_type = array_slice($result2->fetch_assoc(), 0, 11);
                             echo "
-            <div class=\"path\">
-                <div class=\"type\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">", $pet_type["type"], "</a></div>
-            </div>";
+                <div class=\"path\">
+                    <div class=\"type\"> / ", "<a href=\"nestedList.php?type=$type&breed=null\">", $pet_type["type"], "</a></div>
+                </div>";
                             echo "
-        </div>
+            </div>
+            <form class=\"filterContent\" action=\"filtered.php?\" method=\"get\">
+                <div class=\"sliderContainer\">
+                    <label class=\"age-slider\">Age:</label>
+                    <input type=\"number\" name=\"age-from\" min=\"1\" max=\"100\" value=\"1\" class=\"slider\">
+                    <label class=\"age-slider\">to</label>
+                    <input type=\"number\" name=\"age-to\" min=\"1\" max=\"100\" value=\"10\" class=\"slider\">
+                </div>
+                <div class=\"sliderContainer\">
+                    <label class=\"age-slider\">Price:</label>
+                    <input type=\"number\" name=\"price-from\" step=\"10\" min=\"10\" max=\"5000\" value=\"10\" class=\"slider\">
+                    <label class=\"age-slider\">to</label>
+                    <input type=\"number\" name=\"price-to\" step=\"10\" min=\"10\" max=\"5000\" value=\"1000\" class=\"slider\">
+                </div>
+                <input type=\"hidden\" name=\"type\" value=\"$type\">
+                <input type=\"hidden\" name=\"breed\" value=\"null\">
+                <input type=\"submit\" class=\"filterButton\" id=\"filter-submit\" value=\"Filter\">
+            </form>
         </div>
         <div class=\"separator\"></div>
         <div class=\"goods\">";
@@ -230,6 +246,23 @@
                 <div class=\"path-breed\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">", $pet_type["breed"], "</a></div>
             </div>
         </div>
+                <form class=\"filterContent\" action=\"filtered.php?\" method=\"get\">
+                <div class=\"sliderContainer\">
+                    <label class=\"age-slider\">Age:</label>
+                    <input type=\"number\" name=\"age-from\" min=\"1\" max=\"100\" value=\"1\" class=\"slider\">
+                    <label class=\"age-slider\">to</label>
+                    <input type=\"number\" name=\"age-to\" min=\"1\" max=\"100\" value=\"10\" class=\"slider\">
+                </div>
+                <div class=\"sliderContainer\">
+                    <label class=\"age-slider\">Price:</label>
+                    <input type=\"number\" name=\"price-from\" step=\"10\" min=\"10\" max=\"5000\" value=\"10\" class=\"slider\">
+                    <label class=\"age-slider\">to</label>
+                    <input type=\"number\" name=\"price-to\" step=\"10\" min=\"10\" max=\"5000\" value=\"1000\" class=\"slider\">
+                </div>
+                <input type=\"hidden\" name=\"type\" value=\"$type\">
+                <input type=\"hidden\" name=\"breed\" value=\"$breed\">
+                <input type=\"submit\" class=\"filterButton\" id=\"filter - submit\" value=\"Filter\">
+                </form>
         </div>
         <div class=\"separator\"></div>
                 <div class=\"goods\">";
