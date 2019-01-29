@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> <!--Search-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!--LogOut-->
 </head>
 <body>
 <div class="container">
@@ -14,9 +19,19 @@
     <div class="NavigContainer">
         <div class="topnav">
             <a class="home" href="index.php">BARK</a>
+            <?php
+            if ($_SESSION['is_logged']==true) {
+                echo '
+                <a class="topnavRight" href="logout.php"><i class="fa fa-sign-out" style="line-height:65px; font-size:24px"></i></a>
+                <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
+                <a class="topnavRight" href="profile.php">Profile</a>
+                <a class="topnavRight" href="#">Cart<span class="cartNumber">0</span></a>';
+            } else {
+                echo '
             <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
-            <a class="topnavRight" href="#">Login</a>
-            <a class="topnavRight" href="#">Cart</a>
+            <a class="topnavRight" href="loginPage.php">Login</a>
+            <a class="topnavRight" href="#">Cart<span class="cartNumber">0</span></a>';}
+            ?>
         </div>
     </div>
     <div id="main">

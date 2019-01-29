@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,8 +18,16 @@
         <div class="topnav">
             <a class="home" href="index.php">BARK</a>
             <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
-            <a class="topnavRight" href="#">Login</a>
-            <a class="topnavRight" href="#">Cart</a>
+            <?php
+            if ($_SESSION['is_logged']==true) {
+                echo '
+            <a class="topnavRight" href="profile.php">Profile</a>
+            <a class="topnavRight" href="#">Cart<span class="cartNumber">0</span></a>';
+            } else {
+                echo '
+            <a class="topnavRight" href="loginPage.php">Login</a>
+            <a class="topnavRight" href="#">Cart<span class="cartNumber">0</span></a>';}
+            ?>
         </div>
     </div>
     <div id="main">
@@ -154,38 +165,6 @@
             $ageTo = $_GET["age-to"];
             $priceFrom = $_GET["price-from"];
             $priceTo = $_GET["price-to"];
-        if ($type != "null") {
-            echo "
-            <div class=\"path\">
-                <div class=\"type\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">", $type, "</a></div>";
-            if ($breed != "null") {
-                echo "
-                <div class=\"path-breed\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">", $breed, "</a></div>";
-            }
-            echo "</div></div>";
-        }
-        echo "
-            <form class=\"filterContent\" action=\"filtered.php?\" method=\"get\">
-                <div class=\"sliderContainer\">
-                    <label class=\"age-slider\">Age:</label>
-                    <input type=\"number\" name=\"age-from\" min=\"1\" max=\"100\" value=\"$ageFrom\" class=\"slider\">
-                    <label class=\"age-slider\">to</label>
-                    <input type=\"number\" name=\"age-to\" min=\"1\" max=\"100\" value=\"$ageTo\" class=\"slider\">
-                </div>
-                <div class=\"sliderContainer\">
-                   <label class=\"age-slider\">Price:</label>
-                    <input type=\"number\" name=\"price-from\" step=\"10\" min=\"10\" max=\"5000\" value=\"$priceFrom\" class=\"slider\">
-                    <label class=\"age-slider\">to</label>
-                    <input type=\"number\" name=\"price-to\" step=\"10\" min=\"10\" max=\"5000\" value=\"$priceTo\" class=\"slider\">
-                </div>
-                <input type=\"hidden\" name=\"type\" value=\"$type\">
-                <input type=\"hidden\" name=\"breed\" value=\"$breed\">
-                <input type=\"submit\" class=\"filterButton\" id=\"filter-submit\" value=\"Filter\">
-            </form>
-        </div> ";
-        echo "
-        <div class=\"separator\"></div>
-        <div class=\"goods\"> ";
             $servername = "localhost";
             $username = "root";
             $password = "admin";
@@ -222,9 +201,43 @@
             }
 //            echo "$sql";
             $result = $conn->query($sql);
+            $result2 = $conn->query($sql);
 
             if ($result->num_rows > 0) {
                 // output data
+                $pet_type = array_slice($result2->fetch_assoc(), 0, 11);
+                if ($type != "null") {
+                    echo "
+                    <div class=\"path\">
+                    <div class=\"type\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">", $pet_type["type"], "</a></div>";
+                    if ($breed != "null") {
+                        echo "
+                        <div class=\"path-breed\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">", $pet_type["breed"], "</a></div>";
+                    }
+                    echo "</div></div>";
+                }
+                echo "
+                    <form class=\"filterContent\" action=\"filtered.php?\" method=\"get\">
+                        <div class=\"sliderContainer\">
+                            <label class=\"age-slider\">Age:</label>
+                            <input type=\"number\" name=\"age-from\" min=\"1\" max=\"100\" value=\"$ageFrom\" class=\"slider\">
+                            <label class=\"age-slider\">to</label>
+                            <input type=\"number\" name=\"age-to\" min=\"1\" max=\"100\" value=\"$ageTo\" class=\"slider\">
+                        </div>
+                        <div class=\"sliderContainer\">
+                           <label class=\"age-slider\">Price:</label>
+                            <input type=\"number\" name=\"price-from\" step=\"10\" min=\"10\" max=\"5000\" value=\"$priceFrom\" class=\"slider\">
+                            <label class=\"age-slider\">to</label>
+                            <input type=\"number\" name=\"price-to\" step=\"10\" min=\"10\" max=\"5000\" value=\"$priceTo\" class=\"slider\">
+                        </div>
+                        <input type=\"hidden\" name=\"type\" value=\"$type\">
+                        <input type=\"hidden\" name=\"breed\" value=\"$breed\">
+                        <input type=\"submit\" class=\"filterButton\" id=\"filter-submit\" value=\"Filter\">
+                    </form>
+                </div> ";
+                echo "
+        <div class=\"separator\"></div>
+        <div class=\"goods\"> ";
                 while ($row = $result->fetch_assoc()) {
                     $today = new DateTime();
                     $date = new DateTime($row["date"]);
@@ -251,13 +264,19 @@
                     echo "</div>";
                     echo "</div>";
                 }
+                echo "</div>";
             } else {
-                echo "<div class='no-criteria'>We're sorry but there are no goods matching your criteria</div>";
+                echo "</div></div>
+                <div class=\"separator\"></div>
+                <div class='no-criteria'>We're sorry but there are no animals matching your criteria</div>";
             }
             $conn->close();
             ?>
-        </div>
+<!--        </div>-->
     </div>
+        <div class='end'>
+            <span class="copyright">&copy; Žygimantas Augūnas 2019 <?php if(date("Y")!="2019") {echo "- " , date("Y");}?></span>
+        </div>
 </div>
 </body>
 </html>

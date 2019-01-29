@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> <!--Search-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!--LogOut-->
 </head>
 <body>
 <div class="container">
@@ -14,9 +19,19 @@
     <div class="NavigContainer">
         <div class="topnav">
             <a class="home" href="index.php">BARK</a>
+            <?php
+            if ($_SESSION['is_logged']==true) {
+                echo '
+                <a class="topnavRight" href="logout.php"><i class="fa fa-sign-out" style="line-height:65px; font-size:24px"></i></a>
+                <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
+                <a class="topnavRight" href="profile.php">Profile</a>
+                <a class="topnavRight" href="#">Cart<span class="cartNumber">0</span></a>';
+            } else {
+                echo '
             <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
-            <a class="topnavRight" href="#">Login</a>
-            <a class="topnavRight" href="#">Cart</a>
+            <a class="topnavRight" href="loginPage.php">Login</a>
+            <a class="topnavRight" href="#">Cart<span class="cartNumber">0</span></a>';}
+            ?>
         </div>
     </div>
     <div id="main">
@@ -31,17 +46,22 @@
 
                                         <li class="breed"><a href="nestedList.php?type=1&breed=1">Pekingese</a></li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=2">Pug</a></li>
-                                        <li class="breed"><a href="nestedList.php?type=1&breed=3">German Shepherd</a></li>
+                                        <li class="breed"><a href="nestedList.php?type=1&breed=3">German Shepherd</a>
+                                        </li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=4">Poodle</a></li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=5">Bulldog</a></li>
-                                        <li class="breed"><a href="nestedList.php?type=1&breed=6">Labrador Retriever</a></li>
+                                        <li class="breed"><a href="nestedList.php?type=1&breed=6">Labrador Retriever</a>
+                                        </li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=7">Beagle</a></li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=8">Chihuahua</a></li>
-                                        <li class="breed"><a href="nestedList.php?type=1&breed=9">Yorkshire Terrier</a></li>
-                                        <li class="breed"><a href="nestedList.php?type=1&breed=10">Siberian Husky</a></li>
+                                        <li class="breed"><a href="nestedList.php?type=1&breed=9">Yorkshire Terrier</a>
+                                        </li>
+                                        <li class="breed"><a href="nestedList.php?type=1&breed=10">Siberian Husky</a>
+                                        </li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types" href="nestedList.php?type=2&breed=null">Cats</a>
+                                <li class="animalsList"><a class="types"
+                                                           href="nestedList.php?type=2&breed=null">Cats</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=2&breed=1">Russian Blue</a></li>
                                         <li><a href="nestedList.php?type=2&breed=2">Persian cat</a></li>
@@ -55,10 +75,12 @@
                                         <li><a href="nestedList.php?type=2&breed=10)">Scottish Fold</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types" href="nestedList.php?type=3&breed=null">Turtles</a>
+                                <li class="animalsList"><a class="types"
+                                                           href="nestedList.php?type=3&breed=null">Turtles</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=3&breed=1">African Aquatic Sideneck</a></li>
-                                        <li><a href="nestedList.php?type=3&breed=2">Central American Wood Turtle</a></li>
+                                        <li><a href="nestedList.php?type=3&breed=2">Central American Wood Turtle</a>
+                                        </li>
                                         <li><a href="nestedList.php?type=3&breed=3">Painted Turtle</a></li>
                                         <li><a href="nestedList.php?type=3&breed=4">Caspian Pond Turtle</a></li>
                                         <li><a href="nestedList.php?type=3&breed=5">Red Ear Slider Turtle</a></li>
@@ -69,7 +91,8 @@
                                         <li><a href="nestedList.php?type=3&breed=10">Greek Tortoise</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types" href="nestedList.php?type=4&breed=null">Rabbits</a>
+                                <li class="animalsList"><a class="types"
+                                                           href="nestedList.php?type=4&breed=null">Rabbits</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=4&breed=1">Alaskan</a></li>
                                         <li><a href="nestedList.php?type=4&breed=2">American</a></li>
@@ -82,7 +105,8 @@
                                         <li><a href="nestedList.php?type=4&breed=9">Dwarf Hotot</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types" href="nestedList.php?type=5&breed=null">Parrots</a>
+                                <li class="animalsList"><a class="types"
+                                                           href="nestedList.php?type=5&breed=null">Parrots</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=5&breed=1">Cockatoos</a></li>
                                         <li><a href="nestedList.php?type=5&breed=2">Parakeets</a></li>
@@ -96,7 +120,8 @@
                                         <li><a href="nestedList.php?type=5&breed=10">Macaws</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types" href="nestedList.php?type=6&breed=null">Snakes</a>
+                                <li class="animalsList"><a class="types"
+                                                           href="nestedList.php?type=6&breed=null">Snakes</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=6&breed=1">Corn Snake</a></li>
                                         <li><a href="nestedList.php?type=6&breed=2">California Kingsnake</a></li>
@@ -105,14 +130,18 @@
                                         <li><a href="nestedList.php?type=6&breed=5">Ball Python</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types" href="nestedList.php?type=7&breed=null">Spiders</a>
+                                <li class="animalsList"><a class="types"
+                                                           href="nestedList.php?type=7&breed=null">Spiders</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=7&breed=1">Mexican Redknee Tarantulas</a></li>
                                         <li><a href="nestedList.php?type=7&breed=2">Chilean Rose Tarantulas</a></li>
-                                        <li><a href="nestedList.php?type=7&breed=3">Costa Rican Zebra Tarantulas</a></li>
+                                        <li><a href="nestedList.php?type=7&breed=3">Costa Rican Zebra Tarantulas</a>
+                                        </li>
                                         <li><a href="nestedList.php?type=7&breed=4">Mexican Redleg Tarantulas</a></li>
-                                        <li><a href="nestedList.php?type=7&breed=5">Honduran Curly Hair Tarantulas</a></li>
-                                        <li><a href="nestedList.php?type=7&breed=6">Pink Zebra Beauty Tarantulas</a></li>
+                                        <li><a href="nestedList.php?type=7&breed=5">Honduran Curly Hair Tarantulas</a>
+                                        </li>
+                                        <li><a href="nestedList.php?type=7&breed=6">Pink Zebra Beauty Tarantulas</a>
+                                        </li>
                                         <li><a href="nestedList.php?type=7&breed=7">Pink Toe Tarantulas</a></li>
                                         <li><a href="nestedList.php?type=7&breed=8">Brazilian Black Tarantulas</a></li>
                                         <li><a href="nestedList.php?type=7&breed=9">Brazilian Black Tarantulas</a></li>
@@ -148,7 +177,7 @@
                         if ($conn->connect_error) {
                             die("Connection failed: " . $conn->connect_error);
                         }
-                    $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
+                        $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
                             FROM pet AS p 
                             INNER JOIN breed AS b 
                             ON p.breed_id = b.breed_id 
@@ -228,7 +257,7 @@
                             die("Connection failed: " . $conn->connect_error);
                         }
 
-                    $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
+                        $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
                             FROM pet AS p 
                             INNER JOIN breed AS b 
                             ON p.breed_id = b.breed_id 
@@ -301,9 +330,14 @@
                     echo "<script language='text/javascript'>function alertfunc() { alert('Unable to continue. Sorry for inconvenience.'); }</script>";
                 }
                 ?>
-                </div>
+            </div>
+
+        </div>
+        <div class='end'>
+            <span class="copyright">&copy; Žygimantas Augūnas 2019 <?php if (date("Y") != "2019") {
+                    echo "- ", date("Y");
+                } ?></span>
         </div>
     </div>
-</div>
 </body>
 </html>

@@ -1,3 +1,10 @@
+<?php
+session_start();
+//unset($_SESSION['is_logged']);
+//unset($_SESSION['hash']);
+//unset($_SESSION['message']);
+unset($_SESSION['message']);
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> <!--Search-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!--LogOut-->
 </head>
 <body>
 <div class="container">
@@ -14,9 +22,19 @@
     <div class="NavigContainer">
         <div class="topnav">
             <a class="home" href="index.php">BARK</a>
+            <?php
+            if ($_SESSION['is_logged']==true) {
+                echo '
+                <a class="topnavRight" href="logout.php"><i class="fa fa-sign-out" style="line-height:65px; font-size:24px"></i></a>
+                <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
+                <a class="topnavRight" href="profile.php">Profile</a>
+                <a class="topnavRight" href="#">Cart<span class="cartNumber">' , require('loadCartNumber.php') , '</span></a>';
+            } else {
+                echo '
             <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
-            <a class="topnavRight" href="#">Login</a>
-            <a class="topnavRight" href="#">Cart</a>
+            <a class="topnavRight" href="loginPage.php">Login</a>
+            <a class="topnavRight" href="#">Cart<span class="cartNumber">0</span></a>';}
+            ?>
         </div>
     </div>
     <div id="main">
@@ -157,6 +175,9 @@
         <div class="goods">
             <?php require("loadGoods.php") ?>
         </div>
+    </div>
+    <div class='end'>
+        <span class="copyright">&copy; Žygimantas Augūnas 2019<?php if(date("Y")!="2019") {echo "- " , date("Y");}?></span>
     </div>
 </div>
 </body>
