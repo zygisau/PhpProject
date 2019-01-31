@@ -441,6 +441,23 @@ ul {
     align-self: center;
     height: 50px;
     width: 400px;
+    /*bottom: 0;*/
+    background-color: #d1d1d1; /* Green */
+    /*border: none;*/
+    color: black;
+    /*padding: 15px 32px;*/
+    padding: 0;
+    /*text-align: center;*/
+    /*text-decoration: none;*/
+    display: inline-block;
+    /*font-size: 20px;*/
+    top: 20px;
+}
+.submitCart {
+    position: relative;
+    align-self: center;
+    height: 50px;
+    width: 400px;
     bottom: 0;
     background-color: #d1d1d1; /* Green */
     border: none;
@@ -450,7 +467,7 @@ ul {
     text-decoration: none;
     display: inline-block;
     font-size: 20px;
-    top: 20px;
+    /*top: 20px;*/
 }
 .end {
     /*position: absolute;*/

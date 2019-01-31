@@ -1,5 +1,6 @@
 <?php
 session_start();
+unset($_SESSION['message']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -8,8 +9,9 @@ session_start();
     <title>Bark</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="cart.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> <!--Search-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!--LogOut-->
 </head>
 <body>
 <div class="container">
@@ -17,11 +19,11 @@ session_start();
     <div class="NavigContainer">
         <div class="topnav">
             <a class="home" href="index.php">BARK</a>
-            <a class="topnavRight" href="logout.php"><i class="fa fa-sign-out" style="line-height:65px; font-size:24px"></i></a>
-            <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
             <?php
             if ($_SESSION['is_logged']==true) {
                 echo '
+                <a class="topnavRight" href="logout.php"><i class="fa fa-sign-out" style="line-height:65px; font-size:24px"></i></a>
+                <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
                 <a class="topnavRight" href="profile.php">Profile</a>
                 <a class="topnavRight" href="cart.php">Cart<span class="cartNumber">';
                 if(isset($_SESSION['cart'])) {
@@ -30,13 +32,13 @@ session_start();
                 } else {echo "0";} echo '</span></a>';
             } else {
                 echo '
-            <a class="topnavRight" href="loginPage.php">Login</a>
-            <a class="topnavRight" href="cart.php">Cart<span class="cartNumber">';
+                <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
+                <a class="topnavRight" href="loginPage.php">Login</a>
+                <a class="topnavRight" href="cart.php">Cart<span class="cartNumber">';
                 if(isset($_SESSION['cart'])) {
                     $cart = $_SESSION['cart'];
                     echo count($_SESSION['cart']);
-                } else {echo "0";} echo '</span></a>';
-            }
+                } else {echo "0";} echo '</span></a>';}
             ?>
         </div>
     </div>
@@ -52,22 +54,18 @@ session_start();
 
                                         <li class="breed"><a href="nestedList.php?type=1&breed=1">Pekingese</a></li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=2">Pug</a></li>
-                                        <li class="breed"><a href="nestedList.php?type=1&breed=3">German Shepherd</a>
-                                        </li>
+                                        <li class="breed"><a href="nestedList.php?type=1&breed=3">German Shepherd</a></li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=4">Poodle</a></li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=5">Bulldog</a></li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=6">Labrador Retriever</a>
                                         </li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=7">Beagle</a></li>
                                         <li class="breed"><a href="nestedList.php?type=1&breed=8">Chihuahua</a></li>
-                                        <li class="breed"><a href="nestedList.php?type=1&breed=9">Yorkshire Terrier</a>
-                                        </li>
-                                        <li class="breed"><a href="nestedList.php?type=1&breed=10">Siberian Husky</a>
-                                        </li>
+                                        <li class="breed"><a href="nestedList.php?type=1&breed=9">Yorkshire Terrier</a></li>
+                                        <li class="breed"><a href="nestedList.php?type=1&breed=10">Siberian Husky</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types"
-                                                           href="nestedList.php?type=2&breed=null">Cats</a>
+                                <li class="animalsList"><a class="types" href="nestedList.php?type=2&breed=null">Cats</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=2&breed=1">Russian Blue</a></li>
                                         <li><a href="nestedList.php?type=2&breed=2">Persian cat</a></li>
@@ -81,12 +79,10 @@ session_start();
                                         <li><a href="nestedList.php?type=2&breed=10)">Scottish Fold</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types"
-                                                           href="nestedList.php?type=3&breed=null">Turtles</a>
+                                <li class="animalsList"><a class="types" href="nestedList.php?type=3&breed=null">Turtles</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=3&breed=1">African Aquatic Sideneck</a></li>
-                                        <li><a href="nestedList.php?type=3&breed=2">Central American Wood Turtle</a>
-                                        </li>
+                                        <li><a href="nestedList.php?type=3&breed=2">Central American Wood Turtle</a></li>
                                         <li><a href="nestedList.php?type=3&breed=3">Painted Turtle</a></li>
                                         <li><a href="nestedList.php?type=3&breed=4">Caspian Pond Turtle</a></li>
                                         <li><a href="nestedList.php?type=3&breed=5">Red Ear Slider Turtle</a></li>
@@ -97,8 +93,7 @@ session_start();
                                         <li><a href="nestedList.php?type=3&breed=10">Greek Tortoise</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types"
-                                                           href="nestedList.php?type=4&breed=null">Rabbits</a>
+                                <li class="animalsList"><a class="types" href="nestedList.php?type=4&breed=null">Rabbits</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=4&breed=1">Alaskan</a></li>
                                         <li><a href="nestedList.php?type=4&breed=2">American</a></li>
@@ -111,8 +106,7 @@ session_start();
                                         <li><a href="nestedList.php?type=4&breed=9">Dwarf Hotot</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types"
-                                                           href="nestedList.php?type=5&breed=null">Parrots</a>
+                                <li class="animalsList"><a class="types" href="nestedList.php?type=5&breed=null">Parrots</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=5&breed=1">Cockatoos</a></li>
                                         <li><a href="nestedList.php?type=5&breed=2">Parakeets</a></li>
@@ -126,8 +120,7 @@ session_start();
                                         <li><a href="nestedList.php?type=5&breed=10">Macaws</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types"
-                                                           href="nestedList.php?type=6&breed=null">Snakes</a>
+                                <li class="animalsList"><a class="types" href="nestedList.php?type=6&breed=null">Snakes</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=6&breed=1">Corn Snake</a></li>
                                         <li><a href="nestedList.php?type=6&breed=2">California Kingsnake</a></li>
@@ -136,18 +129,14 @@ session_start();
                                         <li><a href="nestedList.php?type=6&breed=5">Ball Python</a></li>
                                     </ul>
                                 </li>
-                                <li class="animalsList"><a class="types"
-                                                           href="nestedList.php?type=7&breed=null">Spiders</a>
+                                <li class="animalsList"><a class="types" href="nestedList.php?type=7&breed=null">Spiders</a>
                                     <ul class="sub2">
                                         <li><a href="nestedList.php?type=7&breed=1">Mexican Redknee Tarantulas</a></li>
                                         <li><a href="nestedList.php?type=7&breed=2">Chilean Rose Tarantulas</a></li>
-                                        <li><a href="nestedList.php?type=7&breed=3">Costa Rican Zebra Tarantulas</a>
-                                        </li>
+                                        <li><a href="nestedList.php?type=7&breed=3">Costa Rican Zebra Tarantulas</a></li>
                                         <li><a href="nestedList.php?type=7&breed=4">Mexican Redleg Tarantulas</a></li>
-                                        <li><a href="nestedList.php?type=7&breed=5">Honduran Curly Hair Tarantulas</a>
-                                        </li>
-                                        <li><a href="nestedList.php?type=7&breed=6">Pink Zebra Beauty Tarantulas</a>
-                                        </li>
+                                        <li><a href="nestedList.php?type=7&breed=5">Honduran Curly Hair Tarantulas</a></li>
+                                        <li><a href="nestedList.php?type=7&breed=6">Pink Zebra Beauty Tarantulas</a></li>
                                         <li><a href="nestedList.php?type=7&breed=7">Pink Toe Tarantulas</a></li>
                                         <li><a href="nestedList.php?type=7&breed=8">Brazilian Black Tarantulas</a></li>
                                         <li><a href="nestedList.php?type=7&breed=9">Brazilian Black Tarantulas</a></li>
@@ -168,126 +157,94 @@ session_start();
                         </li>
                     </ul>
                 </div>
-            <?php
-            $type = $_GET["type"];
-            $breed = $_GET["breed"];
-            $ageFrom = $_GET["age-from"];
-            $ageTo = $_GET["age-to"];
-            $priceFrom = $_GET["price-from"];
-            $priceTo = $_GET["price-to"];
-            $servername = "localhost";
-            $username = "root";
-            $password = "admin";
-            $dbname = "mydb";
-            // Create connection
-            $conn = new mysqli($servername, $username, $password, $dbname);
-            mysqli_set_charset( $conn, 'utf-8');
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-            $yearsFrom = date('Y', time());
-            $yearsFrom-=$ageTo;
-            $yearsTo = date('Y', time());
-            $yearsTo-=$ageFrom;
-            $st = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
-                    FROM pet AS p 
-                    INNER JOIN breed AS b 
-                    ON p.breed_id = b.breed_id 
-                    INNER JOIN pet_type AS t
-                    ON b.type_id = t.type_id AND (YEAR(p.date) BETWEEN \"$yearsFrom\" AND \"$yearsTo\") AND (p.price BETWEEN \"$priceFrom\" AND \"$priceTo\")";
-            $nd = "null";
-            if ($type != "null") {
-                if ($breed != "null") {
-                    $nd = " AND t.type_id=\"$type\" AND b.breed_id=\"$breed\"";
-                } else {
-                    $nd = " AND b.type_id=\"$type\"";
-                }
-            }
-            if ($nd!="null") {
-                $sql = $st.$nd;
-            } else {
-                $sql = $st;
-            }
-//            echo "$sql";
-            $result = $conn->query($sql);
-            $result2 = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-                // output data
-                $pet_type = array_slice($result2->fetch_assoc(), 0, 11);
-                if ($type != "null") {
-                    echo "
-                    <div class=\"path\">
-                    <div class=\"type\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">", $pet_type["type"], "</a></div>";
-                    if ($breed != "null") {
-                        echo "
-                        <div class=\"path-breed\"> / ", "<a href=\"nestedList.php?type=$type&breed=$breed\">", $pet_type["breed"], "</a></div>";
-                    }
-                    echo "</div>";
-                }
-                echo "</div>
-                    <form class=\"filterContent\" action=\"filtered.php?\" method=\"get\">
-                        <div class=\"sliderContainer\">
-                            <label class=\"age-slider\">Age:</label>
-                            <input type=\"number\" name=\"age-from\" min=\"1\" max=\"100\" value=\"$ageFrom\" class=\"slider\">
-                            <label class=\"age-slider\">to</label>
-                            <input type=\"number\" name=\"age-to\" min=\"1\" max=\"100\" value=\"$ageTo\" class=\"slider\">
-                        </div>
-                        <div class=\"sliderContainer\">
-                           <label class=\"age-slider\">Price:</label>
-                            <input type=\"number\" name=\"price-from\" step=\"10\" min=\"10\" max=\"5000\" value=\"$priceFrom\" class=\"slider\">
-                            <label class=\"age-slider\">to</label>
-                            <input type=\"number\" name=\"price-to\" step=\"10\" min=\"10\" max=\"5000\" value=\"$priceTo\" class=\"slider\">
-                        </div>
-                        <input type=\"hidden\" name=\"type\" value=\"$type\">
-                        <input type=\"hidden\" name=\"breed\" value=\"$breed\">
-                        <input type=\"submit\" class=\"filterButton\" id=\"filter-submit\" value=\"Filter\">
-                    </form>
-                </div>";
-                echo "
-        <div class=\"separator\"></div>
-        <div class=\"goods\"> ";
-                while ($row = $result->fetch_assoc()) {
-                    $today = new DateTime();
-                    $date = new DateTime($row["date"]);
-                    $diff = $date->diff($today);
-                    echo "<div class=\"good\">";
-                    echo "<img class=\"photo\" src=\"" , $row["image_path"] , "\">";
-                    echo "<div class=\"clear\"></div>";
-                    echo "<div class=\"firstLine\">";
-//        $tmp = utf8_encode($row["name"]);
-//        echo mb_detect_encoding($row["name"]);
-                    echo "<div class=\"name\">" , $row["name"] , "</div>";
-
-                    if ($diff->format("%y")==0) {
-                        echo "<div class=\"age\">", $diff->format("%m") , " m.</div>";
-                    }
-                    else {
-                        echo "<div class=\"age\">", $diff->format("%y") , " yr.</div>";
-                    }
-                    echo "</div>";
-                    echo "<div class=\"price\">", $row["price"] , " €</div>";
-                    echo "<div class=\"show-more\">";
-                    echo "<a href=\"pet.php?pet=" , $row["pet_id"] , "\">Show More</a>";
-//        echo "<div></div>";
-                    echo "</div>";
-                    echo "</div>";
-                }
-                echo "</div>";
-            } else {
-                echo "</div></div>
-                <div class=\"separator\"></div>
-                <div class='no-criteria'>We're sorry but there are no animals matching your criteria</div>";
-            }
-            $conn->close();
-            ?>
-<!--        </div>-->
-    </div>
-        <div class='end'>
-            <span class="copyright">&copy; Žygimantas Augūnas 2019 <?php if(date("Y")!="2019") {echo "- " , date("Y");}?></span>
+            </div>
         </div>
+        <div class="separator"></div>
+        <div class="cart">
+            <div class="title">CART</div>
+            <div class="separator"></div>
+            <div class="cart-items">
+                <?php
+                function howMany($id) {
+                    foreach ($_SESSION['cart'] as $key => $item) {
+                        $count = 0;
+                        if ($item == $id) {
+                            $count++;
+                        }
+                    }
+                    return $count;
+                }
+                if (isset($_SESSION['cart'])) {
+                    $servername = "localhost";
+                    $username = "root";
+                    $password = "admin";
+                    $dbname = "mydb";
+// Create connection
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    mysqli_set_charset( $conn, 'utf-8');
+// Check connection
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+                    $in = "(";
+                    foreach ($_SESSION['cart'] as $key => $item) {
+                        $in = ( $key !== count( $_SESSION['cart'] ) -1 ) ? $in.$item : $in.$item . ", ";
+                    }
+                    $in = ")";
+                    $sql = $conn->prepare("SELECT * FROM pet WHERE pet_id IN ?");
+                    $sql = $conn->bind_param('s', $in);
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        // output data
+                        echo '
+                <table class="cart-table">
+                    <tr>
+                        <th>ITEM</th>
+                        <th>QUANTITY</th>
+                        <th>SUBTOTAL</th>
+                        <th>PRICE</th>
+                    </tr>
+                        ';
+                        while ($row = $result->fetch_assoc()) {
+                            echo '
+                    <tr class="cart-pet">
+                        <td>><img class="cart-photo" src="' , $row["image_path"] , '"></td>
+                        <td class="name-more-cart">
+                            <div class="name-cart">' , $row['name'] , '</div>
+                            <div class="info-cart"><a href="pet.php?pet=' , $row['pet_id'] , '">About pet</a></div>
+                        </td>
+                        <td class="quantity">
+                            <input type="number" id=count"' , $row['pet_id'] , '" name="number" min="1" max="100" value="' , howMany($row['pet_id']) , '">
+                        </td>
+                        X
+                        <td class="subtotal-cart">
+                            <span>' , $row['price'] , '</span>
+                        </td>
+                        =
+                        <td class="price-cart">
+                            <span></span>
+                        </td>
+                    </tr>
+                            ';
+                        }
+                        echo '
+                </table>
+                        ';
+                    } else {
+                        echo "<div class=\"no-items\">There was a problem while loading your cart.</div>";
+                    }
+                    $conn->close();
+                } else {
+                    echo '<div class="no-items">There are no items in the cart.</div>';
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    <div class='end'>
+        <span class="copyright">&copy; Žygimantas Augūnas 2019<?php if(date("Y")!="2019") {echo "- " , date("Y");}?></span>
+    </div>
 </div>
 </body>
 </html>
-            

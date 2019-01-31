@@ -1,8 +1,5 @@
 <?php
 session_start();
-//unset($_SESSION['is_logged']);
-//unset($_SESSION['hash']);
-//unset($_SESSION['message']);
 unset($_SESSION['message']);
 ?>
 <!DOCTYPE html>
@@ -28,12 +25,20 @@ unset($_SESSION['message']);
                 <a class="topnavRight" href="logout.php"><i class="fa fa-sign-out" style="line-height:65px; font-size:24px"></i></a>
                 <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
                 <a class="topnavRight" href="profile.php">Profile</a>
-                <a class="topnavRight" href="#">Cart<span class="cartNumber">' , require('loadCartNumber.php') , '</span></a>';
+                <a class="topnavRight" href="cart.php">Cart<span class="cartNumber">';
+                if(isset($_SESSION['cart'])) {
+                    $cart = $_SESSION['cart'];
+                    echo count($_SESSION['cart']);
+                } else {echo "0";} echo '</span></a>';
             } else {
                 echo '
-            <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
-            <a class="topnavRight" href="loginPage.php">Login</a>
-            <a class="topnavRight" href="#">Cart<span class="cartNumber">0</span></a>';}
+                <a class="topnavRight" href="#"><i class="fa fa-fw fa-search"></i></a>
+                <a class="topnavRight" href="loginPage.php">Login</a>
+                <a class="topnavRight" href="cart.php">Cart<span class="cartNumber">';
+                if(isset($_SESSION['cart'])) {
+                    $cart = $_SESSION['cart'];
+                    echo count($_SESSION['cart']);
+                } else {echo "0";} echo '</span></a>';}
             ?>
         </div>
     </div>
