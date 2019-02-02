@@ -32,4 +32,6 @@
 //    $_SESSION['message'] = '';
 //    header('Location: error.php');
 //}
-//?>
+//
+echo "HI";
+?>

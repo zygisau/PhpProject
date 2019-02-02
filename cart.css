@@ -33,6 +33,7 @@ body {
     width:98%;
     top: 90px;
     z-index: 1;
+    /*background-color: #7a7a7a;*/
 }
 .cart-items {
     padding-top: 10px;
@@ -50,4 +51,131 @@ body {
     top: 50px;
     align-self: center;
     justify-self: center;
+}
+.cart-table {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.cart-pet {
+    position: relative;
+    width: 100%;
+    height: 225px;
+}
+.cart-photo-container {
+    width: 20%;
+}
+.cart-photo {
+    position: relative;
+    z-index: 1;
+    margin: auto;
+    width: 200px;
+    /*width: 100%;*/
+    height: 225px;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+.name-info-cart {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    /*margin-left: 20px;*/
+    width: 60%;
+}
+.name-cart {
+    font-size: 18pt;
+    font-weight: bold;
+}
+.info-cart {
+    /*margin-top: 170px;*/
+    margin-top: 20px;
+}
+.info-cart a {
+    text-decoration: none;
+    color: black;
+}
+.delete {
+    position: relative;
+    color: #c10000;
+    justify-self: flex-end;
+    top: 100px;
+}
+.quantity {
+    width: 5%;
+}
+.quantity-input {
+    background-color: #d1d1d1;
+    border: none;
+    padding: 5px;
+    font-size: 15pt;
+    border-radius: 5px;
+}
+input[type=number]::-webkit-inner-spin-button {
+    cursor: pointer;
+    display: block;
+    height: 30px;
+    text-align: center;
+    position: relative;
+    background: transparent;
+}
+input[type=number]::-webkit-inner-spin-button::before,
+input[type=number]::-webkit-inner-spin-button::after {
+    position: absolute;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    border-bottom: 10px solid #777;
+}
+input[type=number]::-webkit-inner-spin-button::after {
+    transform: rotate(180deg);
+}
+.subtotal-cart {
+    width: 8%;
+    font-size: 15pt;
+}
+.price-cart {
+    width: 9%;
+    font-size: 15pt;
+}
+.table-separator {
+    align-self: center;
+    margin: 0 auto 5px auto;
+    width: 90%;
+    height: .5px;
+    background-color: #d1d1d1;
+    z-index: 1;
+}
+.arithmetic {
+    width: 4%;
+    font-size: 12pt;
+    font-weight: bold;
+}
+.total {
+    font-size: 30pt;
+    font-weight: bold;
+    height: 50px;
+}
+.total-price {
+    font-size: 20pt;
+    font-weight: bold;
+    color: #c10000;
+}
+.proceed {
+    margin: 10px 0 50px 0;
+}
+.proceed, .proceed input {
+    border: none;
+    padding: 5px;
+    width: 300px;
+    height: 50px;
+    background-color: #8c8c8c;
+    color: black;
+    font-size: 15pt;
+    font-weight: bold;
+    text-decoration: none;
+}
+.proceed input {
+    cursor:pointer;
 }

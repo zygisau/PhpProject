@@ -166,8 +166,8 @@ unset($_SESSION['message']);
             <div class="cart-items">
                 <?php
                 function howMany($id) {
-                    foreach ($_SESSION['cart'] as $key => $item) {
-                        $count = 0;
+                    $count = 0;
+                    foreach ($_SESSION['cart'] as $item) {
                         if ($item == $id) {
                             $count++;
                         }
@@ -180,61 +180,112 @@ unset($_SESSION['message']);
                     $password = "admin";
                     $dbname = "mydb";
 // Create connection
-                    $conn = new mysqli($servername, $username, $password, $dbname);
-                    mysqli_set_charset( $conn, 'utf-8');
-// Check connection
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
-                    $in = "(";
-                    foreach ($_SESSION['cart'] as $key => $item) {
-                        $in = ( $key !== count( $_SESSION['cart'] ) -1 ) ? $in.$item : $in.$item . ", ";
-                    }
-                    $in = ")";
-                    $sql = $conn->prepare("SELECT * FROM pet WHERE pet_id IN ?");
-                    $sql = $conn->bind_param('s', $in);
-                    $result = $conn->query($sql);
+                    try {
+                    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $place_holders = implode(',', array_fill(0, count($_SESSION['cart']), '?'));
+                    $sql = "SELECT * FROM pet WHERE pet_id IN ($place_holders)";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute($_SESSION['cart']);
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    if ($result->num_rows > 0) {
+                    // set the resulting array to associative
+//                    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                    if (count($result) > 0) {
                         // output data
                         echo '
                 <table class="cart-table">
+                <thead>
                     <tr>
-                        <th>ITEM</th>
+                        <th>PET</th>
+                        <th></th>
                         <th>QUANTITY</th>
+                        <th></th>
                         <th>SUBTOTAL</th>
+                        <th></th>
                         <th>PRICE</th>
                     </tr>
+                </thead>
+                <tbody>
                         ';
-                        while ($row = $result->fetch_assoc()) {
+                        $last = array_keys($result);
+                        $lastres = end($last);
+                        foreach ($result as $key => $row) {
                             echo '
                     <tr class="cart-pet">
-                        <td>><img class="cart-photo" src="' , $row["image_path"] , '"></td>
-                        <td class="name-more-cart">
+                        <td align="center" class="cart-photo-container"><img class="cart-photo" src="' , $row["image_path"] , '"></td>
+                        <td class="name-info-cart">
                             <div class="name-cart">' , $row['name'] , '</div>
                             <div class="info-cart"><a href="pet.php?pet=' , $row['pet_id'] , '">About pet</a></div>
+                            <div class="delete"><a style="color: #c10000;text-decoration: none;" href="javascript:deletePet(' , $row['pet_id'] , ');"><b>X</b> Delete pet</a></div>
+                            <script>
+                            function deletePet (id) {
+//                                var pet = document.getElementById("pet").value
+                                var ajax = new XMLHttpRequest();
+                                ajax.open("POST", "deleteFromCart.php", true);
+                                ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                                ajax.onreadystatechange = function() {
+                                    if (this.readyState === 4 && this.status === 200) {
+                                        console.log("Been there, done that");
+                                        location.reload();
+                                    }
+                                }
+                                var send = \'pet_id=\' + id;
+                                console.log(send);
+                                try {
+                                    ajax.send(send);
+                                } catch(err) {
+                                    console.log(err.message);
+                                }
+                            }
+                            </script>
                         </td>
-                        <td class="quantity">
-                            <input type="number" id=count"' , $row['pet_id'] , '" name="number" min="1" max="100" value="' , howMany($row['pet_id']) , '">
+                        <td align="center" class="quantity">
+                            <input type="number" class="quantity-input" id="count' , $row['pet_id'] , '" name="number" min="1" max="100" value="' , howMany($row['pet_id']) , '">
                         </td>
-                        X
-                        <td class="subtotal-cart">
-                            <span>' , $row['price'] , '</span>
+                        <td align="center" class="arithmetic">X</td>
+                        <td align="center" class="subtotal-cart">
+                            <span>' , $row['price'] , ' €</span>
                         </td>
-                        =
-                        <td class="price-cart">
-                            <span></span>
+                        <td align="center" class="arithmetic" style="font-size: 20pt;">=</td>
+                        <td align="center" class="price-cart">
+                            <span>' , $row['price']*howMany($row['pet_id']) , ' €</span>
                         </td>
-                    </tr>
-                            ';
+                    </tr>';
+                        if ($key == $lastres) {
+                            echo '<tr><td colspan="7" align="center"><div class="table-separator" style="background-color: #121212"></div></td></tr>';
+                        } else { echo '<tr><td colspan="7" align="center"><div class="table-separator"></div></td></tr>';}
                         }
                         echo '
-                </table>
-                        ';
+                    <tr>
+                        <td colspan="2" align="center"><div class="total">TOTAL</div></td>
+                        <td colspan="5" align="right"><div class="total-price" id="total-price"></div></td>
+                        <script>
+                        var prices = document.getElementsByClassName("price-cart");
+                        console.log(prices);
+                        var total = document.getElementById("total_price");
+                        calculate();
+                        function getSum(total, num) {
+                            return total + num;
+                        }
+                        function calculate() {
+                            console.log("HOPE");
+                            total.innerHTML = prices.reduce(getSum);
+                        }
+                        </script>
+                    </tr>
+                    <tr>
+                        <td colspan="7" align="right"><form action="proceedToPayment.php" class="proceed"><input type="submit" value="PROCEED TO CHECKOUT"></form></td>
+                    </tr>
+                </tbody>
+                </table>';
                     } else {
                         echo "<div class=\"no-items\">There was a problem while loading your cart.</div>";
                     }
-                    $conn->close();
+                    } catch(PDOException $e) {
+                        echo "Error: " . $e->getMessage();
+                    }
+                    $conn = null;
                 } else {
                     echo '<div class="no-items">There are no items in the cart.</div>';
                 }
