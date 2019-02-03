@@ -20,20 +20,22 @@ if(isset($_SESSION['hash']) && $_SESSION['is_logged']==true) {
         if ($result->num_rows > 0) {
             $user_id = array_slice($result->fetch_assoc(), 0, 1);
             try {
-                $sql = $conn->prepare("INSERT INTO order (user_id, pet_id, order_date) VALUES(?, ?, ?)");
-                $date = date('Y-m-d H:i:s', time());
-                $user = $user_id['user_id'];
-                print_r(gettype($user));
-                echo "</br>";
-                $pet=(int)$_SESSION['cart'][0];
-                print_r(gettype($pet));
-                echo "</br>";
-                print_r(gettype($date));
+                $sql = $conn->prepare("INSERT INTO orders (user_id, pet_id, order_date) VALUES(?, ?, ?)");
                 $sql->bind_param('iis', $user,$pet , $date);
-                print_r($sql);
+                $user = $user_id['user_id'];
+                foreach ($_SESSION['cart'] as $key => $value) {
+                    $date = date('Y-m-d H:i:s', time());
+                    $pet = $value;
+                    $sql->execute();
+                }
+                printf("Error: %s.\n", $sql->error);
+                unset($_SESSION['cart']);
+                header('Location: profile.php');
             } catch (Exception $e) {
 //                print_r("nope" . $conn->error_list);
                 echo 'Caught exception: ',  $e->getMessage(), "\n";
+                echo "Hi";
+                print_r($sql->error);
             }
 //            if ($conn->query($sql) === TRUE) {
 //                echo "New records created successfully";
