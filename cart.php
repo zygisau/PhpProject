@@ -226,7 +226,6 @@ unset($_SESSION['message']);
                                 ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
                                 ajax.onreadystatechange = function() {
                                     if (this.readyState === 4 && this.status === 200) {
-                                        console.log("Been there, done that");
                                         location.reload();
                                     }
                                 }
@@ -241,15 +240,40 @@ unset($_SESSION['message']);
                             </script>
                         </td>
                         <td align="center" class="quantity">
-                            <input type="number" class="quantity-input" id="count' , $row['pet_id'] , '" name="number" min="1" max="100" value="' , howMany($row['pet_id']) , '">
+                            <input type="number" onchange="" class="quantity-input" name="' , $row['pet_id'] , '" min="1" max="100" value="' , howMany($row['pet_id']) , '">
+                            <input type="hidden" value="' , $row['pet_id'] , '">
                         </td>
+                        <script>
+                        document.addEventListener("DOMContentLoaded",function() {
+                            document.querySelector(\'input[name = "' , $row['pet_id'] , '"]\').onchange=changeEventHandler;
+                        },false);
+                        
+                        function changeEventHandler(event) {
+                            // You can use “this” to refer to the selected element.
+                                var ajax = new XMLHttpRequest();
+                                ajax.open("POST", "newCount.php", true);
+                                ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                                ajax.onreadystatechange = function() {
+                                    if (this.readyState === 4 && this.status === 200) {
+//                                        location.reload();
+                                    }
+                                }
+                                var send = \'pet_id=\' + ' , $row['pet_id'] , ' + \'&newValue=\' + event.target.value;
+                                console.log(send);
+                                try {
+                                    ajax.send(send);
+                                } catch(err) {
+                                    console.log(err.message);
+                                }
+                        }
+                        </script>
                         <td align="center" class="arithmetic">X</td>
                         <td align="center" class="subtotal-cart">
                             <span>' , $row['price'] , ' €</span>
                         </td>
                         <td align="center" class="arithmetic" style="font-size: 20pt;">=</td>
                         <td align="center" class="price-cart">
-                            <span>' , $row['price']*howMany($row['pet_id']) , ' €</span>
+                            <span class="price-cart-class">' , $row['price']*howMany($row['pet_id']) , '</span><span> €</span>
                         </td>
                     </tr>';
                         if ($key == $lastres) {
@@ -261,21 +285,24 @@ unset($_SESSION['message']);
                         <td colspan="2" align="center"><div class="total">TOTAL</div></td>
                         <td colspan="5" align="right"><div class="total-price" id="total-price"></div></td>
                         <script>
-                        var prices = document.getElementsByClassName("price-cart");
+                        var total = document.getElementById("total-price");
+                        var prices = document.getElementsByClassName("price-cart-class");
+                        var array = [];
+                        for (var ind=0; ind<prices.length; ind++) {
+                            array.push(parseFloat(prices[ind].outerText))
+                        }
                         console.log(prices);
-                        var total = document.getElementById("total_price");
                         calculate();
                         function getSum(total, num) {
                             return total + num;
                         }
                         function calculate() {
-                            console.log("HOPE");
-                            total.innerHTML = prices.reduce(getSum);
+                            total.innerHTML = array.reduce(getSum) + " €";
                         }
                         </script>
                     </tr>
                     <tr>
-                        <td colspan="7" align="right"><form action="proceedToPayment.php" class="proceed"><input type="submit" value="PROCEED TO CHECKOUT"></form></td>
+                        <td colspan="6" align="right"><form action="proceedToPayment.php" method="POST" class="proceed"><input type="submit" value="PROCEED TO CHECKOUT"></form></td>
                     </tr>
                 </tbody>
                 </table>';
