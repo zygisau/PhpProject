@@ -207,6 +207,7 @@ session_start();
                 <span class="subtitle">PURCHASES</span>
                 <div class="history">
                     <?php
+
                     $servername = "localhost";
                     $username = "root";
                     $password = "admin";
@@ -222,16 +223,92 @@ session_start();
                     <thead>
                         <tr>
                             <th class="on-going">ON GOING</th>
+                            <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        
+                    <tbody>';
+                    $sql = $conn->prepare("SELECT o.*, u.* FROM orders AS o INNER JOIN user AS u ON o.user_id=u.user_id WHERE hash= ? AND delivered=0");
+                    $sql->bind_param('s', $_SESSION['hash']);
+                    $sql->execute();
+                    $result = $sql->get_result();
+                    if ($result->num_rows > 0) {
+                        $dates=array();
+                        $been=false;
+                        while($row = $result->fetch_assoc()) {
+                            foreach ($dates as $key => $value) {
+                                if($value == $row['order_date']) {
+                                    $been=true;
+                                    break;
+                                }
+                            }
+                            if(!$been) {
+                                $dates[] = $row['order_date'];
+                                echo '
+                        <tr class="on-going-order" onclick="send(' , $row['order_id'] , ')">
+                            <td class="on-going-title">Order #' , $row['order_id'] , '</td>
+                            <td align="right" class="on-going-date">' , $row['order_date'] , '</td>
+                        </tr>
+                                ';
+                            } else {
+                                $been=false;
+                            }
+                        }
+                    }
+                    echo '
                     </tbody>
                     </table>
+                    ';
+                    //
+                    echo "<div class='tables-separator'></div>";
+                    echo '
+                    <table class="on-going-table">
+                    <thead>
+                        <tr>
+                            <th class="on-going">PAST</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+                    $sql = $conn->prepare("SELECT o.*, u.* FROM orders AS o INNER JOIN user AS u ON o.user_id=u.user_id WHERE hash= ? AND delivered=1");
+                    $sql->bind_param('s', $_SESSION['hash']);
+                    $sql->execute();
+                    $result = $sql->get_result();
+                    if ($result->num_rows > 0) {
+                        $dates=array();
+                        $been=false;
+                        while($row = $result->fetch_assoc()) {
+                            foreach ($dates as $key => $value) {
+                                if($value == $row['order_date']) {
+                                    $been=true;
+                                    break;
+                                }
+                            }
+                            if(!$been) {
+                                $dates[] = $row['order_date'];
+                                echo '
+                        <tr class="on-going-order" onclick="send(' , $row['order_id'] , ')">
+                            <td class="on-going-title"><b>Order #' , $row['order_id'] , '</b></td>
+                            <td align="right" class="on-going-date">' , $row['order_date'] , '</td>
+                        </tr>
+                                ';
+                            } else {
+                                $been=false;
+                            }
+                        }
+                    }
+                    echo '
+                    </tbody>
+                    </table>
+                    
                     ';
                     ?>
                 </div>
             </div>
+            <script>
+                function send(id) {
+                    window.location.href = "order.php?order_id=" + id;
+                }
+            </script>
         </div>
     </div>
         <div class='end'>

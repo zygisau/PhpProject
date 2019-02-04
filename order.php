@@ -10,6 +10,7 @@ unset($_SESSION['message']);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="index.css">
     <link rel="stylesheet" type="text/css" href="cart.css">
+    <link rel="stylesheet" type="text/css" href="order.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> <!--Search-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!--LogOut-->
 </head>
@@ -161,166 +162,83 @@ unset($_SESSION['message']);
         </div>
         <div class="separator"></div>
         <div class="cart">
-            <div class="title">CART</div>
+            <div class="title">Order #<?php echo $_GET['order_id']?></div>
             <div class="separator"></div>
             <div class="cart-items">
                 <?php
-                function howMany($id) {
-                    $count = 0;
-                    foreach ($_SESSION['cart'] as $item) {
-                        if ($item == $id) {
-                            $count++;
-                        }
-                    }
-                    return $count;
-                }
-                if (isset($_SESSION['cart'])) {
+
+                if (!is_nan($_GET['order_id']) && isset($_SESSION['hash'])) {
                     $servername = "localhost";
                     $username = "root";
                     $password = "admin";
                     $dbname = "mydb";
 // Create connection
-                    try {
-                    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $place_holders = implode(',', array_fill(0, count($_SESSION['cart']), '?'));
-                    $sql = "SELECT * FROM pet WHERE pet_id IN ($place_holders)";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->execute($_SESSION['cart']);
-                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    // set the resulting array to associative
-//                    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                    if (count($result) > 0) {
-                        // output data
-                        echo '
-                <table class="cart-table">
-                <thead>
-                    <tr>
-                        <th>PET</th>
-                        <th></th>
-                        <th>QUANTITY</th>
-                        <th></th>
-                        <th>SUBTOTAL</th>
-                        <th></th>
-                        <th>PRICE</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        ';
-                        $last = array_keys($result);
-                        $lastres = end($last);
-                        foreach ($result as $key => $row) {
-                            echo '
-                    <tr class="cart-pet">
-                        <td align="center" class="cart-photo-container"><img class="cart-photo" src="' , $row["image_path"] , '"></td>
-                        <td class="name-info-cart">
-                            <div class="name-cart">' , $row['name'] , '</div>
-                            <div class="info-cart"><a href="pet.php?pet=' , $row['pet_id'] , '">About pet</a></div>
-                            <div class="delete"><a style="color: #c10000;text-decoration: none;" href="javascript:deletePet(' , $row['pet_id'] , ');"><b>X</b> Delete pet</a></div>
-                            <script>
-                            function deletePet (id) {
-//                                var pet = document.getElementById("pet").value
-                                var ajax = new XMLHttpRequest();
-                                ajax.open("POST", "deleteFromCart.php", true);
-                                ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-                                ajax.onreadystatechange = function() {
-                                    if (this.readyState === 4 && this.status === 200) {
-                                        location.reload();
-                                    }
-                                }
-                                var send = \'pet_id=\' + id;
-                                console.log(send);
-                                try {
-                                    ajax.send(send);
-                                } catch(err) {
-                                    console.log(err.message);
-                                }
-                            }
-                            </script>
-                        </td>
-                        <td align="center" class="quantity">
-                            <input type="number" onchange="" class="quantity-input" name="' , $row['pet_id'] , '" min="1" max="100" value="' , howMany($row['pet_id']) , '">
-                            <input type="hidden" value="' , $row['pet_id'] , '">
-                        </td>
-                        <script>
-                        document.addEventListener("DOMContentLoaded",function() {
-                            document.querySelector(\'input[name = "' , $row['pet_id'] , '"]\').onchange=changeEventHandler;
-                        },false);
-                        
-                        function changeEventHandler(event) {
-                            // You can use “this” to refer to the selected element.
-                                var ajax = new XMLHttpRequest();
-                                ajax.open("POST", "newCount.php", true);
-                                ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-                                ajax.onreadystatechange = function() {
-                                    if (this.readyState === 4 && this.status === 200) {
-//                                        location.reload();
-                                    }
-                                }
-                                var send = \'pet_id=\' + ' , $row['pet_id'] , ' + \'&newValue=\' + event.target.value;
-                                console.log(send);
-                                try {
-                                    ajax.send(send);
-                                } catch(err) {
-                                    console.log(err.message);
-                                }
-                        }
-                        </script>
-                        <td align="center" class="arithmetic">X</td>
-                        <td align="center" class="subtotal-cart">
-                            <span>' , $row['price'] , ' €</span>
-                        </td>
-                        <td align="center" class="arithmetic" style="font-size: 20pt;">=</td>
-                        <td align="center" class="price-cart">
-                            <span class="price-cart-class">' , $row['price']*howMany($row['pet_id']) , '</span><span> €</span>
-                        </td>
-                    </tr>';
-                        if ($key == $lastres) {
-                            echo '<tr><td colspan="7" align="center"><div class="table-separator" style="background-color: #121212"></div></td></tr>';
-                        } else { echo '<tr><td colspan="7" align="center"><div class="table-separator"></div></td></tr>';}
-                        }
-                        echo '
-                    <tr>
-                        <td colspan="2" align="center"><div class="total">TOTAL</div></td>
-                        <td colspan="5" align="right"><div class="total-price" id="total-price"></div></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" align="right"><form action="proceedToPayment.php" method="POST" class="proceed">
-                        <input type="submit" value="PROCEED TO CHECKOUT">
-                        <input id="submit" name="price" type="hidden" value="">
-                        </form></td>
-                        <script>
-                        var total = document.getElementById("total-price");
-                        var prices = document.getElementsByClassName("price-cart-class");
-                        var submit = document.getElementById("submit");
-                        var array = [];
-                        for (var ind=0; ind<prices.length; ind++) {
-                            array.push(parseFloat(prices[ind].outerText))
-                        }
-                        console.log(prices);
-                        calculate();
-                        function getSum(total, num) {
-                            return total + num;
-                        }
-                        function calculate() {
-                            var result = array.reduce(getSum);
-                            total.innerHTML = result + " €";
-                            submit.value = result;
-                        }
-                        </script>
-                    </tr>
-                </tbody>
-                </table>';
-                    } else {
-                        echo "<div class=\"no-items\">There was a problem while loading your cart.</div>";
+                    // Create connection
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    // Check connection
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
                     }
-                    } catch(PDOException $e) {
-                        echo "Error: " . $e->getMessage();
+                    $presql = $conn->prepare("SELECT order_date FROM orders WHERE order_id = ?");
+                    $presql->bind_param('i', $_GET['order_id']);
+                    $presql->execute();
+                    $preresult = $presql->get_result();
+                    $preresult = $preresult->fetch_assoc();
+//                    print_r($preresult);
+                    $sql = $conn->prepare("SELECT o.*, u.*, p.* FROM pet AS p INNER JOIN orders AS o ON o.pet_id = p.pet_id INNER JOIN user AS u ON o.user_id=u.user_id WHERE o.order_date=? AND u.hash=?");
+                    $sql->bind_param('si', $preresult['order_date'], $_SESSION['hash']);
+                    $sql->execute();
+                    $result = $sql->get_result();
+                    if ($result->num_rows > 0) {
+                        // output data
+                        while($row = $result->fetch_assoc())
+                        {
+                            echo '
+                <div class="order-pet">' , $row['name'] , '</div>
+                <div class="order-separator"></div>
+                            ';
+                            $total = $row['total_price'];
+                            $paid = $row['paid'];
+                        }
+                        echo '
+                <div class="separator-total"></div>
+                <div class="last-total">
+                    <div class="total">TOTAL</div>
+                    <div class="total-price">' , $total , ' €</div>
+                </div>
+                <div>';
+                    if (!$paid) {
+                        echo '
+                        <button type="button" class="pay" onclick="pay(\'',$preresult['order_date'] , '\')">PAY FOR THE PRODUCT</button>
+                        <br><span id="payment-info"></span>';
+                    }
+                echo '</div>
+                <script>
+                function pay(date) {
+                    var ajax = new XMLHttpRequest();
+                    ajax.open("POST", "sendPayment.php", true);
+                    ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                    ajax.onreadystatechange = function() {
+                        if (this.readyState === 4 && this.status === 200) {
+                            var response = this.responseText;
+                            document.getElementById("payment-info").innerHTML = response;
+                        }
+                    }
+                    var send = "state=true&date=" + date;
+                    try {
+                        ajax.send(send);
+                    } catch(err) {
+                        console.log(err.message);
+                    }
+                }
+                </script>
+                        ';
+                    } else {
+                        echo "<div class=\"no-items\">There was a problem while loading your order.</div>";
                     }
                     $conn = null;
                 } else {
-                    echo '<div class="no-items">There are no items in the cart.</div>';
+                    echo '<div class="no-items">Something went wrong while trying to authorize the user.</div>';
                 }
                 ?>
             </div>

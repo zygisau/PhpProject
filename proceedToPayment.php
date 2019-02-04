@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(isset($_SESSION['hash']) && $_SESSION['is_logged']==true) {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['price']) && !is_nan($_POST['price'])) {
 // conn variables
         $servername = "localhost";
         $username = "root";
@@ -20,12 +20,13 @@ if(isset($_SESSION['hash']) && $_SESSION['is_logged']==true) {
         if ($result->num_rows > 0) {
             $user_id = array_slice($result->fetch_assoc(), 0, 1);
             try {
-                $sql = $conn->prepare("INSERT INTO orders (user_id, pet_id, order_date) VALUES(?, ?, ?)");
-                $sql->bind_param('iis', $user,$pet , $date);
+                $sql = $conn->prepare("INSERT INTO orders (user_id, pet_id, order_date, price) VALUES(?, ?, ?, ?)");
+                $sql->bind_param('iisd', $user,$pet , $date, $price);
                 $user = $user_id['user_id'];
                 foreach ($_SESSION['cart'] as $key => $value) {
                     $date = date('Y-m-d H:i:s', time());
                     $pet = $value;
+                    $price = $_POST['price'];
                     $sql->execute();
                 }
                 printf("Error: %s.\n", $sql->error);
@@ -43,7 +44,7 @@ if(isset($_SESSION['hash']) && $_SESSION['is_logged']==true) {
 //                echo "Error: " . $sql . "<br>" . $conn->error;
 //            }
         } else {
-            $_SESSION['message'] = 'Ups! We were not able to authenticate You.' . $sql;
+            $_SESSION['message'] = 'Ups! We were not able to authenticate You.';
             header('Location: error.php');
         }
         $conn->close();
