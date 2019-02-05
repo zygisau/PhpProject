@@ -186,14 +186,16 @@ session_start();
                         if ($conn->connect_error) {
                             die("Connection failed: " . $conn->connect_error);
                         }
-                        $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
+                        $sql = $conn->prepare("SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
                             FROM pet AS p 
                             INNER JOIN breed AS b 
                             ON p.breed_id = b.breed_id 
                             INNER JOIN pet_type AS t
-                            ON b.type_id = t.type_id AND b.type_id = \"$type\"";
-                        $result = $conn->query($sql);
-                        $result2 = $conn->query($sql);
+                            ON b.type_id = t.type_id WHERE b.type_id = ?");
+                        $sql->bind_param("i", $type);
+                        $sql->execute();
+                        $result = $sql->get_result();
+                        $result2 = $result;
 
                         if ($result->num_rows > 0) {
                             $pet_type = array_slice($result2->fetch_assoc(), 0, 11);
@@ -266,14 +268,16 @@ session_start();
                             die("Connection failed: " . $conn->connect_error);
                         }
 
-                        $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
+                        $sql = $conn->prepare("SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
                             FROM pet AS p 
                             INNER JOIN breed AS b 
                             ON p.breed_id = b.breed_id 
                             INNER JOIN pet_type AS t
-                            ON b.type_id = t.type_id AND b.type_id = \"$type\" AND p.breed_id=\"$breed\"";
-                        $result = $conn->query($sql);
-                        $result2 = $conn->query($sql);
+                            ON b.type_id = t.type_id WHERE b.type_id=? AND p.breed_id=?");
+                        $sql->bind_param("ii", $type, $breed);
+                        $sql->execute();
+                        $result = $sql->get_result();
+                        $result2 = $result;
 
                         if ($result->num_rows > 0) {
                             $pet_type = array_slice($result2->fetch_assoc(), 0, 11);
@@ -342,11 +346,12 @@ session_start();
             </div>
 
         </div>
-        <div class='end'>
+
+    </div>
+    <div class='end'>
             <span class="copyright">&copy; Žygimantas Augūnas 2019 <?php if (date("Y") != "2019") {
                     echo "- ", date("Y");
                 } ?></span>
-        </div>
     </div>
 </body>
 </html>

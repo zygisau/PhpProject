@@ -38,6 +38,7 @@ session_start();
             </script>
             <?php if(!is_null($_SESSION['message'])) {
                 echo "<span class='error'>" , $_SESSION['message'] , "</span>";
+                unset($_SESSION['message']);
             }?>
         </form>
         <span>Already have an account? <a href='loginPage.php'>Log in</a></span>

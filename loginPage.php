@@ -22,6 +22,7 @@ session_start();
             <input class='login' type="submit" value="Login">
             <?php if(!is_null($_SESSION['message'])) {
                 echo "<span class='error'>" , $_SESSION['message'] , "</span>";
+                unset($_SESSION['message']);
             }?>
         </form>
         <span>Don't have an account? <a href='signup.php'>Create one</a></span>

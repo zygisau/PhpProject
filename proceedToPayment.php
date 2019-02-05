@@ -55,6 +55,6 @@ if(isset($_SESSION['hash']) && $_SESSION['is_logged']==true) {
     }
 } else {
     $_SESSION['message'] = 'Please log in to continue your purchase';
-    header('Location: login.php');
+    header('Location: loginPage.php');
 }
 ?>

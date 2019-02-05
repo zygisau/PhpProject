@@ -16,8 +16,10 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 // Is there already a user with that email?
-$sql = "SELECT password, hash FROM user WHERE email='$email'";
-$result = $conn->query($sql);
+$sql = $conn->prepare("SELECT password, hash FROM user WHERE email=?");
+$sql->bind_param('s', $email);
+$sql->execute();
+$result = $sql->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     if(password_verify($_POST["password"],$row['password'])) {
@@ -33,5 +35,4 @@ if ($result->num_rows > 0) {
         header('Location:loginPage.php');
 }
 $conn->close();
-
 ?>

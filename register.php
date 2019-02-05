@@ -19,15 +19,17 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 // Is there already a user with that email?
-$sql = "SELECT * FROM user WHERE email='$email'";
-$result = $conn->query($sql);
+$sql = $conn->prepare("SELECT * FROM user WHERE email=?");
+$sql->bind_param("s", $email);
+$sql->execute();
+$result = $sql->get_result();
 if ($result -> num_rows > 0) {
     $_SESSION['message'] = 'User with this e-mail already exists';
     header('Location:signup.php');
 } else { // if user is new
-    $sql = "INSERT INTO user (fname, lname, email, password, hash) "
-            . "VALUES ('$fname', '$lname', '$email', '$pass', '$hash')";
-    if($conn->query($sql)) {
+    $sql = $conn->prepare("INSERT INTO user (fname, lname, email, password, hash) VALUES (?, ?, ?, ?, ?)");
+    $sql->bind_param("sssss", $fname, $lname, $email, $pass, $hash);
+    if($sql->execute()) {
         $_SESSION['is_logged'] = true;
         $_SESSION['hash'] = $hash;
         header('Location:index.php');

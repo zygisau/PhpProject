@@ -196,15 +196,32 @@ session_start();
                         die("Connection failed: " . $conn->connect_error);
                     }
 
-                    $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
-                            FROM pet AS p 
-                            INNER JOIN breed AS b 
-                            ON p.breed_id = b.breed_id 
+//                    $sql = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type
+//                            FROM pet AS p
+//                            INNER JOIN breed AS b
+//                            ON p.breed_id = b.breed_id
+//                            INNER JOIN pet_type AS t
+//                            ON b.type_id = t.type_id AND p.pet_id=\"$pet\"";
+//                    $result = $conn->query($sql);
+//                    $result2 = $conn->query($sql);
+                    $sql = $conn->prepare("SELECT t.type_id, b.breed_id, p.*, b.breed, t.type
+                            FROM pet AS p
+                            INNER JOIN breed AS b
+                            ON p.breed_id = b.breed_id
                             INNER JOIN pet_type AS t
-                            ON b.type_id = t.type_id AND p.pet_id=\"$pet\"";
-                    $result = $conn->query($sql);
-                    $result2 = $conn->query($sql);
-
+                            ON b.type_id = t.type_id WHERE p.pet_id=?");
+                    $sql->bind_param("i", $pet);
+                    if(!$sql->execute()) {print_r($sql->error);}
+                    $result = $sql->get_result();
+                    $stmt = $conn->prepare("SELECT t.type_id, b.breed_id, p.*, b.breed, t.type
+                            FROM pet AS p
+                            INNER JOIN breed AS b
+                            ON p.breed_id = b.breed_id
+                            INNER JOIN pet_type AS t
+                            ON b.type_id = t.type_id WHERE p.pet_id=?");
+                    $stmt->bind_param("i", $pet);
+                    if(!$stmt->execute()) {print_r($stmt->error);}
+                    $result2 = $stmt->get_result();
                     if ($result->num_rows > 0) {
                         $pet_type = $result2->fetch_assoc();
                         echo "
@@ -219,6 +236,7 @@ session_start();
         <div class=\"separator\"></div>
         <div class=\"goods\">";
                         // output data
+
                         while ($row = $result->fetch_assoc()) {
                             $today = new DateTime();
                             $date = new DateTime($row["date"]);
@@ -228,6 +246,7 @@ session_start();
                             echo "<img class=\"pet-photo\" src=\"", $row["image_path"], "\">";
                             echo "<div class=\"info\">";
                             echo "<h1>", $row["name"], "</h1>";
+//                            echo mb_detect_encoding($row["name"]);
                             echo "<h2>", $row["price"], " €</h2>";
                             echo "<div class=\"separator-info\"></div>";
                             echo "<h3>Description</h3>";

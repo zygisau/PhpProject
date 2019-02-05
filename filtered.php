@@ -190,28 +190,36 @@ session_start();
             $yearsFrom-=$ageTo;
             $yearsTo = date('Y', time());
             $yearsTo-=$ageFrom;
+
             $st = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
                     FROM pet AS p 
                     INNER JOIN breed AS b 
                     ON p.breed_id = b.breed_id 
                     INNER JOIN pet_type AS t
-                    ON b.type_id = t.type_id AND (YEAR(p.date) BETWEEN \"$yearsFrom\" AND \"$yearsTo\") AND (p.price BETWEEN \"$priceFrom\" AND \"$priceTo\")";
+                    ON b.type_id = t.type_id AND (YEAR(p.date) BETWEEN ? AND ?) AND (p.price BETWEEN ? AND ?)";
             $nd = "null";
             if ($type != "null") {
                 if ($breed != "null") {
-                    $nd = " AND t.type_id=\"$type\" AND b.breed_id=\"$breed\"";
+                    $nd = " AND t.type_id=? AND b.breed_id=?";
+                    $stmt = $st.$nd;
+                    $sql = $conn->prepare($stmt);
+                    $sql->bind_param("iissii", $yearsFrom, $yearsTo, $priceFrom, $priceTo, $type, $breed);
+                    $sql->execute();
                 } else {
-                    $nd = " AND b.type_id=\"$type\"";
+                    $nd = " AND b.type_id=?";
+                    $stmt = $st.$nd;
+                    $sql = $conn->prepare($stmt);
+                    $sql->bind_param("iissi", $yearsFrom, $yearsTo, $priceFrom, $priceTo, $type);
+                    $sql->execute();
                 }
-            }
-            if ($nd!="null") {
-                $sql = $st.$nd;
             } else {
-                $sql = $st;
+                $sql = $conn->prepare($st);
+                $sql->bind_param("iiss", $yearsFrom, $yearsTo, $priceFrom, $priceTo);
+                $sql->execute();
             }
 //            echo "$sql";
-            $result = $conn->query($sql);
-            $result2 = $conn->query($sql);
+            $result = $sql->get_result();
+            $result2 = $result;
 
             if ($result->num_rows > 0) {
                 // output data
