@@ -27,7 +27,7 @@ session_start();
         <span>Don't have an account? <a href='signup.php'>Create one</a></span>
     </div>
     <div class='end'>
-        <span class=\"copyright\">&copy; Žygimantas Augūnas 2019 <?php if(date("Y")!="2019") {echo "- " , date("Y");}?></span>
+        <span class="copyright">&copy; Žygimantas Augūnas 2019 <?php if(date("Y")!="2019") {echo "- " , date("Y");}?></span>
     </div>
 </div>
 </body>

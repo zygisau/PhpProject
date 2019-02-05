@@ -194,11 +194,17 @@ unset($_SESSION['message']);
                         while($row = $result->fetch_assoc())
                         {
                             echo '
-                <div class="order-pet">' , $row['name'] , '</div>
+                <div class="order-container">
+                    <img class="cart-photo" src="' , $row['image_path'] , '">                                    
+                    <div class="order-pet">' , $row['name'] , '</div>
+                    <div class="info-cart"><a href="pet.php?pet=' , $row['pet_id'] , '">About pet</a></div>
+                </div>
                 <div class="order-separator"></div>
+                
                             ';
                             $total = $row['total_price'];
                             $paid = $row['paid'];
+                            $delivered = $row['delivered'];
                         }
                         echo '
                 <div class="separator-total"></div>
@@ -206,29 +212,53 @@ unset($_SESSION['message']);
                     <div class="total">TOTAL</div>
                     <div class="total-price">' , $total , ' €</div>
                 </div>
-                <div>';
+                <div style="width: 100%; height: 100%">';
                     if (!$paid) {
                         echo '
-                        <button type="button" class="pay" onclick="pay(\'',$preresult['order_date'] , '\')">PAY FOR THE PRODUCT</button>
+                        <table class="buttons">
+                        <tbody>
+                            <tr align="center">
+                                <td><button type="button" class="pay" onclick="order(\'',$preresult['order_date'] , '\', \'pay\')">PAY FOR THE PRODUCT</button></td>
+                                <td><button type="button" class="pay deletebutton" onclick="order(\'',$preresult['order_date'] , '\', \'delete\')">DELETE THE ORDER</button></td>
+                            </tr>                       
+                        </tbody>
+                        </table>
+                        <br><span id="payment-info"></span>';
+                    } else if (!$delivered) {
+                        echo '
+                        <table class="buttons">
+                        <tbody>
+                            <tr align="center">
+                                <td><button type="button" class="pay" onclick="order(\'',$preresult['order_date'] , '\', \'deliver\')">MARK AS DELIVERED</button></td>
+                            </tr>                       
+                        </tbody>
+                        </table>
                         <br><span id="payment-info"></span>';
                     }
                 echo '</div>
                 <script>
-                function pay(date) {
+                function order(date, state) {
                     var ajax = new XMLHttpRequest();
-                    ajax.open("POST", "sendPayment.php", true);
+                    ajax.open("POST", "orderModification.php", true);
                     ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
                     ajax.onreadystatechange = function() {
                         if (this.readyState === 4 && this.status === 200) {
                             var response = this.responseText;
                             document.getElementById("payment-info").innerHTML = response;
+                            if (state === "delete") {
+                                window.location="profile.php";
+                            } else {
+                                location.reload();
+                            }
                         }
                     }
-                    var send = "state=true&date=" + date;
-                    try {
-                        ajax.send(send);
-                    } catch(err) {
-                        console.log(err.message);
+                    if (state === "pay" || state === "deliver"  || state === "delete" ) {
+                        var send = "state=" + state + "&date=" + date;
+                        try {
+                            ajax.send(send);
+                        } catch(err) {
+                            console.log(err.message);
+                        }
                     }
                 }
                 </script>

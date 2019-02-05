@@ -19,12 +19,13 @@ if(isset($_SESSION['hash']) && $_SESSION['is_logged']==true) {
         $result = $sql->get_result();
         if ($result->num_rows > 0) {
             $user_id = array_slice($result->fetch_assoc(), 0, 1);
+            print_r($_SESSION['cart']);
             try {
-                $sql = $conn->prepare("INSERT INTO orders (user_id, pet_id, order_date, price) VALUES(?, ?, ?, ?)");
+                $sql = $conn->prepare("INSERT INTO orders (user_id, pet_id, order_date, total_price) VALUES(?, ?, ?, ?)");
                 $sql->bind_param('iisd', $user,$pet , $date, $price);
                 $user = $user_id['user_id'];
+                $date = date('Y-m-d H:i:s', time());
                 foreach ($_SESSION['cart'] as $key => $value) {
-                    $date = date('Y-m-d H:i:s', time());
                     $pet = $value;
                     $price = $_POST['price'];
                     $sql->execute();
