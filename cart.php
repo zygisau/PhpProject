@@ -8,8 +8,8 @@ unset($_SESSION['message']);
     <meta charset="UTF-8">
     <title>Bark</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="index.css">
-    <link rel="stylesheet" type="text/css" href="cart.css">
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+    <link rel="stylesheet" type="text/css" href="styles/cart.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> <!--Search-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!--LogOut-->
 </head>
