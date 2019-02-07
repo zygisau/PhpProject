@@ -36,7 +36,7 @@ session_start();
             password.onchange = validatePassword;
             confirm_password.onkeyup = validatePassword;
             </script>
-            <?php if(!is_null($_SESSION['message'])) {
+            <?php if(isset($_SESSION['message']) && !is_null($_SESSION['message'])) {
                 echo "<span class='error'>" , $_SESSION['message'] , "</span>";
                 unset($_SESSION['message']);
             }?>

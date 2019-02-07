@@ -20,7 +20,7 @@ session_start();
             <input class='inputs' type="text" name="email" placeholder="E-mail" required>
             <input class='inputs' type="password" name="password" placeholder="Password" required>
             <input class='login' type="submit" value="Login">
-            <?php if(!is_null($_SESSION['message'])) {
+            <?php if(isset($_SESSION['message']) && !is_null($_SESSION['message'])) {
                 echo "<span class='error'>" , $_SESSION['message'] , "</span>";
                 unset($_SESSION['message']);
             }?>

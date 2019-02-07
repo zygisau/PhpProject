@@ -93,3 +93,29 @@ body {
 
     z-index: 1;
 }
+.no-purchases {
+    position: relative;
+    top: 10px;
+}
+@media screen and (max-width: 621px) {
+    .history {
+        flex-direction: column;
+    }
+    .tables-separator {
+        top: 5px;
+        height: 1px;
+        width: 100px;
+    }
+    .on-going-table {
+        width: 100%;
+    }
+    .no-purchases {
+        position: relative;
+        top: 5px;
+    }
+}
+@media screen and (max-width: 397px) {
+    .topnavRight {
+        margin-right: 15px;
+    }
+}

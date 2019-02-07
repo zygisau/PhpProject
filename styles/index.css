@@ -485,3 +485,99 @@ ul {
     left: 10px;
     top: 15px;
 }
+
+/*-----------------------------media queries-----------------------------*/
+
+@media screen and (max-width: 1616px) {
+.goods {
+    justify-content: center;
+}
+}
+@media screen and (max-width: 1120px) {
+    .filter {
+        flex-direction: column;
+        height: 100px;
+        justify-content: center;
+        align-items: center;
+        vertical-align: center;
+        flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+    }
+    #main {
+        margin: auto
+    }
+    .filterContent {
+        width: 100%;
+    }
+    .left-element {
+        width: 50%;
+        align-self: center;
+        justify-self: center;
+    }
+    .filterContent {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+    }
+    .filter {
+        flex-direction: row;
+        height: 100px;
+        justify-content: center;
+        align-items: center;
+        vertical-align: center;
+        flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+    }
+    .separator {
+        top: 100px;
+    }
+}
+@media screen and (max-width: 750px) {
+    .filterContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .left-element {
+        width: 100%;
+        align-self: center;
+        justify-self: center;
+    }
+    .filter {
+        flex-direction: row;
+        height: 100px;
+        justify-content: center;
+        align-items: center;
+        vertical-align: center;
+        flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+    }
+    .sliderContainer {
+        margin: 10px 0 0 0;
+    }
+    .filterButton {
+        margin: 10px 0 0 0;
+    }
+    .goods {
+        margin-top: 80px;
+    }
+    .separator {
+        top: 180px;
+    }
+}
+@media screen and (max-width: 404px) {
+    .left-element {
+        width: 390px;
+        align-self: center;
+        justify-self: center;
+        margin: 0;
+    }
+    .main {
+        margin: 0;
+    }
+}
