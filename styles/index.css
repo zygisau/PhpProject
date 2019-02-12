@@ -350,6 +350,7 @@ ul {
 }
 .show-more {
     display: none;
+    width: 400px;
     transition: 1s;
     margin-top: 10px;
 }

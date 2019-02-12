@@ -6,7 +6,7 @@ for ($i = 0; $i < count($cart); $i++) {
 //foreach ($cart as $key => $value) {
     if ($cart[$i] == $_POST['pet_id']) {
         array_splice($cart, $i, 1);
-        $i--;
+        break;
     }
     print_r($cart);
 }

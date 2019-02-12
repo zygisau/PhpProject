@@ -169,6 +169,7 @@ session_start();
                     </ul>
                 </div>
             <?php
+
             $type = $_GET["type"];
             $breed = $_GET["breed"];
             $ageFrom = $_GET["age-from"];
@@ -181,16 +182,15 @@ session_start();
             $dbname = "mydb";
             // Create connection
             $conn = new mysqli($servername, $username, $password, $dbname);
-            mysqli_set_charset( $conn, 'utf-8');
+            mysqli_set_charset($conn, 'utf-8');
             // Check connection
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             }
             $yearsFrom = date('Y', time());
-            $yearsFrom-=$ageTo;
+            $yearsFrom -= $ageTo;
             $yearsTo = date('Y', time());
-            $yearsTo-=$ageFrom;
-
+            $yearsTo -= $ageFrom;
             $st = "SELECT t.type_id, b.breed_id, p.*, b.breed, t.type 
                     FROM pet AS p 
                     INNER JOIN breed AS b 
@@ -201,13 +201,13 @@ session_start();
             if ($type != "null") {
                 if ($breed != "null") {
                     $nd = " AND t.type_id=? AND b.breed_id=?";
-                    $stmt = $st.$nd;
+                    $stmt = $st . $nd;
                     $sql = $conn->prepare($stmt);
                     $sql->bind_param("iissii", $yearsFrom, $yearsTo, $priceFrom, $priceTo, $type, $breed);
                     $sql->execute();
                 } else {
                     $nd = " AND b.type_id=?";
-                    $stmt = $st.$nd;
+                    $stmt = $st . $nd;
                     $sql = $conn->prepare($stmt);
                     $sql->bind_param("iissi", $yearsFrom, $yearsTo, $priceFrom, $priceTo, $type);
                     $sql->execute();
@@ -261,23 +261,22 @@ session_start();
                     $date = new DateTime($row["date"]);
                     $diff = $date->diff($today);
                     echo "<div class=\"good\">";
-                    echo "<img class=\"photo\" src=\"" , $row["image_path"] , "\">";
+                    echo "<img class=\"photo\" src=\"", $row["image_path"], "\">";
                     echo "<div class=\"clear\"></div>";
                     echo "<div class=\"firstLine\">";
 //        $tmp = utf8_encode($row["name"]);
 //        echo mb_detect_encoding($row["name"]);
-                    echo "<div class=\"name\">" , $row["name"] , "</div>";
+                    echo "<div class=\"name\">", $row["name"], "</div>";
 
-                    if ($diff->format("%y")==0) {
-                        echo "<div class=\"age\">", $diff->format("%m") , " m.</div>";
-                    }
-                    else {
-                        echo "<div class=\"age\">", $diff->format("%y") , " yr.</div>";
+                    if ($diff->format("%y") == 0) {
+                        echo "<div class=\"age\">", $diff->format("%m"), " m.</div>";
+                    } else {
+                        echo "<div class=\"age\">", $diff->format("%y"), " yr.</div>";
                     }
                     echo "</div>";
-                    echo "<div class=\"price\">", $row["price"] , " €</div>";
+                    echo "<div class=\"price\">", $row["price"], " €</div>";
                     echo "<div class=\"show-more\">";
-                    echo "<a href=\"pet.php?pet=" , $row["pet_id"] , "\">Show More</a>";
+                    echo "<a href=\"pet.php?pet=", $row["pet_id"], "\">Show More</a>";
 //        echo "<div></div>";
                     echo "</div>";
                     echo "</div>";

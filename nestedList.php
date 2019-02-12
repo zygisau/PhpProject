@@ -347,7 +347,7 @@ session_start();
 
         </div>
 
-    </div>
+<!--    </div>-->
     <div class='end'>
             <span class="copyright">&copy; Žygimantas Augūnas 2019 <?php if (date("Y") != "2019") {
                     echo "- ", date("Y");

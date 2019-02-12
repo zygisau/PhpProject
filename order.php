@@ -166,7 +166,6 @@ unset($_SESSION['message']);
             <div class="separator"></div>
             <div class="cart-items">
                 <?php
-
                 if (!is_nan($_GET['order_id']) && isset($_SESSION['hash'])) {
                     $servername = "localhost";
                     $username = "root";
